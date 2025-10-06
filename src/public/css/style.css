@@ -1,0 +1,104 @@
+/* --- src/public/css/style.css --- */
+
+/* 1. Importamos la tipografía "Poppins" desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* 2. Estilos generales para toda la página */
+body {
+    background-color: #f0f2f5; /* Un gris muy claro para el fondo */
+    font-family: 'Poppins', sans-serif; /* Aplicamos la nueva tipografía */
+    color: #333;
+    -webkit-font-smoothing: antialiased; /* Hace que el texto se vea más suave */
+}
+
+/* 3. Estilos para el contenedor principal de nuestro contenido */
+.content-wrapper {
+    max-width: 900px; /* Ancho máximo para que no se estire demasiado en pantallas grandes */
+    margin: 40px auto; /* Centra el contenedor y le da espacio arriba y abajo */
+    background-color: #ffffff; /* Fondo blanco para la tarjeta principal */
+    padding: 30px;
+    border-radius: 20px; /* ¡Las esquinas redondeadas que querías! */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07); /* Una sombra suave para darle profundidad */
+}
+
+/* 4. Estilos para los títulos (y el emoji) */
+h1.main-title {
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1.main-title::before {
+    content: '👋'; /* ¡Aquí está tu emoji! */
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+/* 5. Estilos para la tabla */
+.table {
+    border-collapse: separate;
+    border-spacing: 0 10px; /* Espacio vertical entre filas */
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    border: none;
+    font-weight: 600;
+}
+
+.table tbody tr {
+    background-color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.table tbody td {
+    border: none;
+    vertical-align: middle;
+}
+.table tbody tr td:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+.table tbody tr td:last-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
+
+
+/* 6. Estilos para los botones */
+.btn {
+    border-radius: 8px; /* Esquinas redondeadas para los botones */
+    border: none;
+    padding: 8px 15px;
+    transition: all 0.3s ease;
+}
+
+.btn-success { background-color: #28a745; }
+.btn-warning { background-color: #ffc107; }
+.btn-danger { background-color: #dc3545; }
+.btn-primary { background-color: #007bff; }
+
+.btn:hover {
+    transform: translateY(-2px); /* Pequeño efecto al pasar el mouse */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 7. Estilos para los formularios y tarjetas */
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+    background-color: #343a40;
+    color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    font-weight: 500;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+    border-color: #80bdff;
+}

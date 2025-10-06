@@ -1,0 +1,35 @@
+<%- include('../partials/header') %>
+
+<div class="max-w-lg mx-auto bg-white rounded-lg shadow-xl p-6 md:p-8">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Registrar Nuevo Pedido</h1>
+
+    <form action="/pedidos/create" method="POST" enctype="multipart/form-data">
+        <div class="mb-4">
+            <label for="id_cliente" class="block text-gray-700 text-sm font-semibold mb-2">Cliente</label>
+            <select name="id_cliente" id="id_cliente" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                <option value="">-- Seleccione un Cliente --</option>
+                <% clientes.forEach(function(cliente) { %>
+                    <option value="<%= cliente.id_cliente %>"><%= cliente.nombre %></option>
+                <% }); %>
+            </select>
+        </div>
+        <div class="mb-4">
+            <label for="fecha" class="block text-gray-700 text-sm font-semibold mb-2">Fecha del Pedido</label>
+            <input type="date" name="fecha" id="fecha" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+        </div>
+        <div class="mb-4">
+            <label for="total" class="block text-gray-700 text-sm font-semibold mb-2">Monto Total (S/)</label>
+            <input type="number" name="total" id="total" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" step="0.01" required>
+        </div>
+        <div class="mb-6">
+            <label for="comprobante_img" class="block text-gray-700 text-sm font-semibold mb-2">Comprobante de Pago</label>
+            <input type="file" name="comprobante_img" id="comprobante_img" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+        </div>
+        
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
+            Guardar Pedido
+        </button>
+    </form>
+</div>
+
+<%- include('../partials/footer') %>
