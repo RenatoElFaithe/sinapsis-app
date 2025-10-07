@@ -32,7 +32,7 @@ export async function initDatabase() {
       );
     `);
     
-    // Tabla pedidos  
+    // Tabla pedidos - CORREGIDA CON COMPROBANTE_IMG
     await client.query(`
       CREATE TABLE IF NOT EXISTS pedidos (
         id SERIAL PRIMARY KEY,
@@ -42,6 +42,7 @@ export async function initDatabase() {
         precio DECIMAL(10,2) NOT NULL,
         total DECIMAL(10,2) NOT NULL,
         estado VARCHAR(50) DEFAULT 'pendiente',
+        comprobante_img VARCHAR(255),  // COLUMNA FALTANTE AGREGADA
         fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
