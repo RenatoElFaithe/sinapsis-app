@@ -1,28 +1,46 @@
 <%- include('../partials/header') %>
 
 <div class="max-w-lg mx-auto bg-white rounded-lg shadow-xl p-6 md:p-8">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Editar Pedido #<%= pedido.id_pedido %></h1>
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Editar Pedido #<%= pedido.id %></h1>
 
-    <form action="/pedidos/edit/<%= pedido.id_pedido %>" method="POST" enctype="multipart/form-data">
+    <form action="/pedidos/edit/<%= pedido.id %>" method="POST" enctype="multipart/form-data">
         <div class="mb-4">
-            <label for="id_cliente" class="block text-gray-700 text-sm font-semibold mb-2">Cliente</label>
-            <select name="id_cliente" id="id_cliente" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+            <label for="cliente_id" class="block text-gray-700 text-sm font-semibold mb-2">Cliente</label>
+            <select name="cliente_id" id="cliente_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                 <option value="">-- Seleccione un Cliente --</option>
                 <% clientes.forEach(function(cliente) { %>
-                    <option value="<%= cliente.id_cliente %>" <%= cliente.id_cliente == pedido.id_cliente ? 'selected' : '' %>>
+                    <option value="<%= cliente.id %>" <%= cliente.id == pedido.cliente_id ? 'selected' : '' %>>
                         <%= cliente.nombre %>
                     </option>
                 <% }); %>
             </select>
         </div>
+        
         <div class="mb-4">
-            <label for="fecha" class="block text-gray-700 text-sm font-semibold mb-2">Fecha del Pedido</label>
-            <input type="date" name="fecha" id="fecha" value="<%= pedido.fecha_formateada %>" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+            <label for="producto" class="block text-gray-700 text-sm font-semibold mb-2">Producto/Artículo</label>
+            <input type="text" name="producto" id="producto" value="<%= pedido.producto %>" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
         </div>
+
         <div class="mb-4">
-            <label for="total" class="block text-gray-700 text-sm font-semibold mb-2">Monto Total (S/)</label>
-            <input type="number" name="total" id="total" value="<%= pedido.total %>" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" step="0.01" required>
+            <label for="fecha_pedido" class="block text-gray-700 text-sm font-semibold mb-2">Fecha del Pedido</label>
+            <input type="date" name="fecha_pedido" id="fecha_pedido" value="<%= pedido.fecha_formateada %>" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
         </div>
+        
+        <div class="mb-4">
+            <label for="cantidad" class="block text-gray-700 text-sm font-semibold mb-2">Cantidad</label>
+            <input type="number" name="cantidad" id="cantidad" value="<%= pedido.cantidad %>" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+        </div>
+
+        <div class="mb-4">
+            <label for="precio" class="block text-gray-700 text-sm font-semibold mb-2">Precio Unitario (S/)</label>
+            <input type="number" name="precio" id="precio" value="<%= pedido.precio %>" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" step="0.01" required>
+        </div>
+
+        <div class="mb-4">
+            <label for="total" class="block text-gray-700 text-sm font-semibold mb-2">Monto Total (Calculado)</label>
+            <input type="number" id="total" value="<%= pedido.total %>" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" step="0.01" readonly>
+        </div>
+
         <div class="mb-6">
             <label class="block text-gray-700 text-sm font-semibold mb-2">Comprobante de Pago</label>
             <% if (pedido.comprobante_img) { %>
