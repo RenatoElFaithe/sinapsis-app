@@ -5,54 +5,62 @@ config();
 
 const { Pool } = pkg;
 
+console.log('🔧 Configurando conexión a PostgreSQL...');
+
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false } // necesario para Render
+  ssl: { 
+    rejectUnauthorized: false 
+  }
 });
 
-// Función para inicializar la base de datos (CREAR TABLAS)
+// Función para inicializar tablas
 export async function initDatabase() {
-    try {
-        // Crear tabla clientes
-        await pool.query(`
-            CREATE TABLE IF NOT EXISTS clientes (
-                id SERIAL PRIMARY KEY,
-                nombre VARCHAR(100) NOT NULL,
-                email VARCHAR(100) UNIQUE NOT NULL,
-                telefono VARCHAR(20),
-                direccion TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        `);
-
-        // Crear tabla pedidos
-        await pool.query(`
-            CREATE TABLE IF NOT EXISTS pedidos (
-                id SERIAL PRIMARY KEY,
-                cliente_id INTEGER REFERENCES clientes(id),
-                producto VARCHAR(200) NOT NULL,
-                cantidad INTEGER NOT NULL,
-                precio DECIMAL(10,2) NOT NULL,
-                total DECIMAL(10,2) NOT NULL,
-                estado VARCHAR(50) DEFAULT 'pendiente',
-                fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        `);
-
-        console.log('✅ Tablas verificadas/creadas en PostgreSQL');
-    } catch (error) {
-        console.error('❌ Error al inicializar tablas:', error);
-    }
+  const client = await pool.connect();
+  try {
+    console.log('🔄 Inicializando tablas de PostgreSQL...');
+    
+    // Tabla clientes
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS clientes (
+        id SERIAL PRIMARY KEY,
+        nombre VARCHAR(100) NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        telefono VARCHAR(20),
+        direccion TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    
+    // Tabla pedidos  
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS pedidos (
+        id SERIAL PRIMARY KEY,
+        cliente_id INTEGER REFERENCES clientes(id),
+        producto VARCHAR(200) NOT NULL,
+        cantidad INTEGER NOT NULL,
+        precio DECIMAL(10,2) NOT NULL,
+        total DECIMAL(10,2) NOT NULL,
+        estado VARCHAR(50) DEFAULT 'pendiente',
+        fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    
+    console.log('✅ Tablas de PostgreSQL creadas/verificadas exitosamente');
+  } catch (error) {
+    console.error('❌ Error creando tablas en PostgreSQL:', error);
+  } finally {
+    client.release();
+  }
 }
 
-// Verificar conexión
-try {
-  const res = await pool.query('SELECT 1');
-  console.log('>>> Conexión a la base de datos exitosa ✅');
-  
-  // Inicializar tablas después de conectar
-  await initDatabase();
-} catch (error) {
-  console.error('>>> Error al conectar con la base de datos ❌:', error);
-}
+// Probar conexión e inicializar
+pool.query('SELECT NOW()')
+  .then(() => {
+    console.log('✅ Conexión a PostgreSQL exitosa');
+    initDatabase();
+  })
+  .catch(err => {
+    console.error('❌ Error conectando a PostgreSQL:', err);
+  });
