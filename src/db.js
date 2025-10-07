@@ -7,7 +7,6 @@ const { Pool } = pkg;
 
 console.log('🔧 Configurando conexión a PostgreSQL...');
 
-// El objeto ssl se asegura de que la conexión funcione correctamente en Render
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { 
@@ -21,7 +20,7 @@ export async function initDatabase() {
   try {
     console.log('🔄 Inicializando tablas de PostgreSQL...');
     
-    /* Tabla clientes */ // Usamos un comentario de bloque para evitar posibles conflictos de sintaxis
+    /* Tabla clientes */ 
     await client.query(`
       CREATE TABLE IF NOT EXISTS clientes (
         id SERIAL PRIMARY KEY,
@@ -33,7 +32,7 @@ export async function initDatabase() {
       );
     `);
     
-    /* Tabla pedidos */ // Usamos un comentario de bloque
+    /* Tabla pedidos */ 
     await client.query(`
       CREATE TABLE IF NOT EXISTS pedidos (
         id SERIAL PRIMARY KEY,
@@ -51,7 +50,6 @@ export async function initDatabase() {
     
     console.log('✅ Tablas de PostgreSQL creadas/verificadas exitosamente');
   } catch (error) {
-    // Es clave que el error se logre para el diagnóstico, ¡buen trabajo aquí!
     console.error('❌ Error creando tablas en PostgreSQL:', error);
   } finally {
     client.release();

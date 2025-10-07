@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Muestra todos los pedidos
+// Muestra todos los pedidos (sin cambios necesarios aquí)
 export const renderPedidos = async (req, res) => {
     try {
         const result = await pool.query(`
@@ -24,7 +24,7 @@ export const renderPedidos = async (req, res) => {
     }
 };
 
-// Muestra el formulario para crear un nuevo pedido
+// Muestra el formulario para crear un nuevo pedido (sin cambios necesarios aquí)
 export const renderPedidoCreateForm = async (req, res) => {
     try {
         const clientesResult = await pool.query('SELECT id, nombre FROM clientes');
@@ -38,7 +38,7 @@ export const renderPedidoCreateForm = async (req, res) => {
     }
 };
 
-// Guarda el nuevo pedido en la base de datos - CORREGIDO y con VALIDACIÓN
+// Guarda el nuevo pedido en la base de datos (con VALIDACIÓN)
 export const createPedido = async (req, res) => {
     try {
         console.log('📝 Datos recibidos:', req.body);
@@ -46,8 +46,7 @@ export const createPedido = async (req, res) => {
         const { fecha_pedido, producto, cantidad, precio, cliente_id } = req.body;
         const comprobante_img = req.file ? req.file.filename : null;
         
-        // --- 💡 CORRECCIÓN CLAVE: VALIDACIÓN DE CAMPOS REQUERIDOS ---
-        // Previene el error 'null value in column "producto" violates not-null constraint'
+        // --- VALIDACIÓN CLAVE: Previene el error NOT NULL ---
         if (!producto || !cantidad || !precio) {
             console.error('❌ Falta uno o más campos requeridos (producto, cantidad, precio).');
             return res.status(400).send('Faltan campos requeridos para crear el pedido (producto, cantidad, precio).');
@@ -61,7 +60,7 @@ export const createPedido = async (req, res) => {
             console.error('❌ Cantidad o Precio no son números válidos o son cero/negativos.');
             return res.status(400).send('Cantidad y precio deben ser números positivos válidos.');
         }
-        // -----------------------------------------------------------------
+        // ----------------------------------------------------
 
         // Calcular total automáticamente
         const total = numCantidad * numPrecio;
@@ -81,12 +80,11 @@ export const createPedido = async (req, res) => {
         res.redirect('/pedidos');
     } catch (error) {
         console.error('❌ Error al crear pedido:', error);
-        // Enviamos el mensaje de error completo al cliente para debug
         res.status(500).send('Error al crear el pedido: ' + error.message);
     }
 };
 
-// Muestra el formulario para editar un pedido
+// Muestra el formulario para editar un pedido (sin cambios necesarios aquí)
 export const renderPedidoEditForm = async (req, res) => {
     try {
         const { id } = req.params;
@@ -99,6 +97,7 @@ export const renderPedidoEditForm = async (req, res) => {
 
         const pedido = pedidoResult.rows[0];
         if (pedido) {
+            // Formatear la fecha para que el input type="date" lo lea correctamente
             pedido.fecha_formateada = new Date(pedido.fecha_pedido).toISOString().split('T')[0];
         }
 
@@ -113,14 +112,14 @@ export const renderPedidoEditForm = async (req, res) => {
     }
 };
 
-// Actualiza el pedido en la base de datos - CORREGIDO y con VALIDACIÓN
+// Actualiza el pedido en la base de datos (con VALIDACIÓN)
 export const updatePedido = async (req, res) => {
     try {
         const { id } = req.params;
-        const { fecha_pedido, producto, cantidad, precio, cliente_id } = req.body;
+        // La vista envía 'fecha_pedido' y no 'fecha'. Se asume el cambio aquí.
+        const { fecha_pedido, producto, cantidad, precio, cliente_id } = req.body; 
 
-        // --- 💡 CORRECCIÓN CLAVE: VALIDACIÓN DE CAMPOS REQUERIDOS ---
-        // Previene el error 'null value in column "producto" violates not-null constraint'
+        // --- VALIDACIÓN CLAVE: Previene el error NOT NULL ---
         if (!producto || !cantidad || !precio) {
             console.error('❌ Falta uno o más campos requeridos (producto, cantidad, precio) para actualizar.');
             return res.status(400).send('Faltan campos requeridos para actualizar el pedido (producto, cantidad, precio).');
@@ -133,7 +132,7 @@ export const updatePedido = async (req, res) => {
             console.error('❌ Cantidad o Precio no son números válidos o son cero/negativos.');
             return res.status(400).send('Cantidad y precio deben ser números positivos válidos para actualizar.');
         }
-        // -----------------------------------------------------------------
+        // ----------------------------------------------------
         
         // Calcular total automáticamente
         const total = numCantidad * numPrecio;
@@ -149,7 +148,6 @@ export const updatePedido = async (req, res) => {
                 try {
                     await fs.unlink(path.join(__dirname, `../public/uploads/${oldImage}`));
                 } catch (err) {
-                    // Si el archivo ya no existe, ignoramos el error, pero lo logeamos
                     if (err.code !== 'ENOENT') {
                         console.error("No se pudo eliminar la imagen antigua:", err);
                     }
@@ -172,7 +170,7 @@ export const updatePedido = async (req, res) => {
     }
 };
 
-// Elimina un pedido de la base de datos
+// Elimina un pedido de la base de datos (sin cambios necesarios aquí)
 export const deletePedido = async (req, res) => {
     try {
         const { id } = req.params;
