@@ -69,6 +69,27 @@ app.get('/init-db', async (req, res) => {
   }
 });
 
+// Ruta para ARREGLAR la tabla pedidos (AGREGAR COLUMNA FALTANTE)
+app.get('/fix-pedidos-table', async (req, res) => {
+  try {
+    // Agregar columna comprobante_img si no existe
+    await pool.query(`
+      ALTER TABLE pedidos 
+      ADD COLUMN IF NOT EXISTS comprobante_img VARCHAR(255)
+    `);
+    
+    res.json({ 
+      success: true, 
+      message: '✅ Columna comprobante_img agregada exitosamente a la tabla pedidos' 
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+});
+
 // Ruta de salud
 app.get('/health', async (req, res) => {
   try {
@@ -91,5 +112,6 @@ app.listen(PORT, () => {
   console.log(`🚀 Servidor Node.js con PostgreSQL corriendo en puerto ${PORT}`);
   console.log(`🏥 Health check: http://localhost:${PORT}/health`);
   console.log(`🗃️ Init DB: http://localhost:${PORT}/init-db`);
+  console.log(`🔧 Fix Pedidos: http://localhost:${PORT}/fix-pedidos-table`);
   console.log(`🏠 App principal: http://localhost:${PORT}`);
 });
