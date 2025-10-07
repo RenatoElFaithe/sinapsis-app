@@ -2,7 +2,6 @@
 
 <div class="bg-white rounded-lg shadow-xl p-6 md:p-8">
     
-    <!-- Cabecera de la tabla -->
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl md:text-3xl font-bold text-gray-800">
             <span class="mr-2">🧾</span>Pedidos
@@ -12,7 +11,6 @@
         </a>
     </div>
 
-    <!-- Tabla de pedidos -->
     <div class="overflow-x-auto">
         <table class="w-full text-left">
             <thead class="bg-gray-50 border-b-2 border-gray-200">
@@ -29,10 +27,10 @@
                 <% if (pedidos.length > 0) { %>
                     <% pedidos.forEach(function(pedido) { %>
                         <tr class="border-b hover:bg-gray-50">
-                            <td class="p-4 text-gray-700"><%= pedido.id_pedido %></td>
+                            <td class="p-4 text-gray-700"><%= pedido.id %></td>
                             <td class="p-4 text-gray-900 font-medium"><%= pedido.cliente_nombre %></td>
-                            <td class="p-4 text-gray-700"><%= new Date(pedido.fecha).toLocaleDateString() %></td>
-                            <td class="p-4 text-gray-700">S/ <%= pedido.total %></td>
+                            <td class="p-4 text-gray-700"><%= new Date(pedido.fecha_pedido).toLocaleDateString() %></td>
+                            <td class="p-4 text-gray-700">S/ <%= parseFloat(pedido.total).toFixed(2) %></td>
                             <td class="p-4">
                                 <% if (pedido.comprobante_img) { %>
                                     <img src="/uploads/<%= pedido.comprobante_img %>" alt="Comprobante" class="w-16 h-16 object-cover rounded-md shadow-sm">
@@ -41,9 +39,9 @@
                                 <% } %>
                             </td>
                             <td class="p-4 flex space-x-2">
-                                <!-- ¡AQUÍ ESTÁ LA CORRECCIÓN! -->
-                                <a href="/pedidos/edit/<%= pedido.id_pedido %>" class="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-1 px-3 rounded-md text-sm transition-transform transform hover:scale-105">Editar</a>
-                                <a href="/pedidos/delete/<%= pedido.id_pedido %>" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded-md text-sm transition-transform transform hover:scale-105" onclick="return confirm('¿Estás seguro de que quieres eliminar este pedido?');">Eliminar</a>
+                                <a href="/pedidos/edit/<%= pedido.id %>" class="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-1 px-3 rounded-md text-sm transition-transform transform hover:scale-105">Editar</a>
+                                
+                                <a href="/pedidos/delete/<%= pedido.id %>" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded-md text-sm transition-transform transform hover:scale-105" onclick="return confirm('¿Estás seguro de que quieres eliminar este pedido?');">Eliminar</a>
                             </td>
                         </tr>
                     <% }); %>
